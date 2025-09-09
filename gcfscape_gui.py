@@ -652,7 +652,23 @@ class PreviewWidget(QWidget):
             self.vtf_view.load_vtf(data)
             self.stack.setCurrentWidget(self.vtf_view)
         elif ext == ".mdl":
-            self.mdl_view.load_model(data)
+            vvd_data = vtx_data = None
+            try:
+                folder = entry.folder
+                base = os.path.splitext(entry.name)[0]
+                vvd_entry = folder.items.get(base + ".vvd")
+                if vvd_entry:
+                    with vvd_entry.open("rb") as s:
+                        vvd_data = s.read(vvd_entry.size())
+                # VTX files may have platform/LOD suffixes; pick the first match
+                for name, ent in folder.items.items():
+                    if name.startswith(base) and name.endswith(".vtx"):
+                        with ent.open("rb") as s:
+                            vtx_data = s.read(ent.size())
+                        break
+            except Exception:
+                pass
+            self.mdl_view.load_model(data, vvd_data, vtx_data)
             self.stack.setCurrentWidget(self.mdl_view)
         elif ext in IMAGE_EXTS:
             self.image_view.load_image(data)
