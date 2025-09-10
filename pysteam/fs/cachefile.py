@@ -305,9 +305,13 @@ class CacheFile:
             manifest.manifest_map_entries = [inverse.get(i, i) for i in original_map_entries]
         else:
             if block_entry_map is not None:
-                manifest.manifest_map_entries = [
-                    block_entry_map.entries[i] for i in original_map_entries
-                ]
+                mapped: list[int] = []
+                for i in original_map_entries:
+                    if i == 0xFFFFFFFF or i >= len(block_entry_map.entries):
+                        mapped.append(0xFFFFFFFF)
+                    else:
+                        mapped.append(block_entry_map.entries[i])
+                manifest.manifest_map_entries = mapped
             block_entry_map = None
             owner.block_entry_map = None
 
