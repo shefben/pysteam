@@ -103,7 +103,7 @@ from PyQt5.QtWidgets import (
 
 # The pysteam cache file parser is used to read GCF/NCF archives.  It
 # exposes a similar API to the original C++ version used by GCFScape.
-from pysteam.fs.cachefile import CacheFile, CacheFileManifestEntry
+from pysteam.fs.cachefile import GCFFile as CacheFile, CacheFileManifestEntry
 from pysteam.fs.archive import open_archive, VpkArchive, ArchivePackage
 from pysteam.bsp.preview import BSPViewWidget
 from pysteam.image import ImageViewWidget
